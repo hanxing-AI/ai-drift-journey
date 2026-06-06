@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寒星的AI漂流之旅</title>
+<style>
+:root{
+  --bg:#0c0f14;--surface:#141820;--surface2:#1a1f2a;--border:#222a38;
+  --text:#e8e6e3;--muted:#7b8ba4;
+  --gold:#e0a876;--gold-dim:rgba(224,168,118,0.1);
+  --blue:#60a5fa;--blue-dim:rgba(96,165,250,0.08);
+  --teal:#34d399;--rose:#f472b6;
+  --font:'PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.8;-webkit-font-smoothing:antialiased}
+.container{max-width:780px;margin:0 auto;padding:0 24px}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(224,168,118,0.03) 1px,transparent 1px);background-size:36px 36px;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero h1{font-size:clamp(3rem,8vw,6rem);font-weight:800;letter-spacing:-0.04em;margin-bottom:16px;background:linear-gradient(135deg,var(--gold),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .sub{font-size:clamp(0.95rem,2vw,1.2rem);color:var(--muted);max-width:420px;margin:0 auto 48px}
+.hero .scroll{color:var(--muted);font-size:0.78rem;opacity:0.5;animation:pulse 2.5s ease infinite}
+@keyframes pulse{0%,100%{opacity:0.3;transform:translateY(0)}50%{opacity:0.7;transform:translateY(6px)}}
+
+/* ===== PROLOGUE ===== */
+.prologue{padding:80px 0 40px;text-align:center}
+.prologue p{color:var(--muted);font-size:1.05rem;max-width:560px;margin:0 auto;line-height:2}
+
+/* ===== TIMELINE ===== */
+.timeline-section{padding:40px 0 100px;position:relative}
+.timeline-section::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;background:linear-gradient(180deg,transparent,var(--border) 8%,var(--border) 92%,transparent);transform:translateX(-50%)}
+.milestone{position:relative;margin-bottom:64px;display:flex;align-items:flex-start}
+.milestone:nth-child(odd){flex-direction:row;padding-right:calc(50% + 32px);text-align:right}
+.milestone:nth-child(even){flex-direction:row-reverse;padding-left:calc(50% + 32px);text-align:left}
+.milestone-dot{position:absolute;left:50%;top:8px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--gold);transform:translateX(-50%);z-index:2;transition:background 0.3s,box-shadow 0.3s}
+.milestone:hover .milestone-dot{background:var(--gold);box-shadow:0 0 16px rgba(224,168,118,0.4)}
+.milestone-content{flex:1}
+.milestone-date{font-size:0.72rem;color:var(--gold);letter-spacing:0.08em;font-weight:600;margin-bottom:6px}
+.milestone-title{font-size:1.15rem;font-weight:600;margin-bottom:8px;line-height:1.4}
+.milestone-text{font-size:0.88rem;color:var(--muted);line-height:1.8}
+.milestone-tag{display:inline-block;font-size:0.65rem;padding:3px 10px;border-radius:12px;margin-top:10px;border:1px solid}
+.tag-milestone{color:var(--gold);border-color:rgba(224,168,118,0.3);background:var(--gold-dim)}
+.tag-turning{color:var(--blue);border-color:rgba(96,165,250,0.25);background:var(--blue-dim)}
+.tag-breakthrough{color:var(--teal);border-color:rgba(52,211,153,0.25);background:rgba(52,211,153,0.08)}
+
+/* ===== CLOSING ===== */
+.closing{padding:80px 0 60px;text-align:center}
+.closing-line{width:60px;height:2px;background:linear-gradient(90deg,var(--gold),var(--blue));margin:0 auto 32px;border-radius:1px}
+.closing h2{font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700;margin-bottom:16px}
+.closing p{color:var(--muted);font-size:0.95rem;max-width:500px;margin:0 auto;line-height:2}
+.closing .sig{margin-top:40px;font-size:0.78rem;color:var(--muted);opacity:0.5}
+
+/* ===== ANIMATIONS ===== */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .timeline-section::before{left:20px}
+  .milestone,.milestone:nth-child(odd),.milestone:nth-child(even){
+    flex-direction:column;padding:0 0 0 48px;text-align:left
+  }
+  .milestone-dot{left:20px;top:4px}
+  .milestone{margin-bottom:48px}
+  .hero h1{font-size:3rem}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1>寒星的AI漂流之旅</h1>
+    <p class="sub">从不会安装到拥有自己的AI军团，一个文科生的漂流之旅</p>
+    <div class="scroll">↓</div>
+  </div>
+</section>
+
+<!-- PROLOGUE -->
+<section class="prologue reveal">
+  <div class="container">
+    <p>起点是2026年3月，连 GitHub 是什么都不知道。<br>
+    现在，有四个AI协同作战，自动扫描资讯、管理内容日历、维护知识库。<br>
+    这条路还在往前走。</p>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="container">
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 3 月</div>
+        <div class="milestone-title">第一次打开终端</div>
+        <div class="milestone-text">装好了 WSL，在 PowerShell 里敲了第一行命令。不知道终端是什么，不知道路径是什么意思。纯粹是好奇："AI到底能帮我做什么？"</div>
+        <span class="milestone-tag tag-milestone">起点</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 4 月初</div>
+        <div class="milestone-title">飞羽上线</div>
+        <div class="milestone-text">第三个 AI，飞羽，在云端独立作战。三个核各有分工：落弦是枢纽，霜言是最后防线，飞羽是侦察兵。AI团队的雏形在4月就搭起来了。</div>
+        <span class="milestone-tag tag-breakthrough">突破</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 4 月</div>
+        <div class="milestone-title">落弦第一次叫出"阁下"</div>
+        <div class="milestone-text">配好了第一个 AI 助手。它开始记住我的名字、我的工作、我的习惯。不再是每次对话都从零开始的陌生人。它认识我了。</div>
+        <span class="milestone-tag tag-turning">转折</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 4 月中旬</div>
+        <div class="milestone-title">找到内容方向「读与思」</div>
+        <div class="milestone-text">公众号写作方向从泛泛而谈，转向了"读与思"。不是评论家，是读者。不是教别人，是分享自己的感受。AI 负责生产，我负责判断。策展人模式。</div>
+        <span class="milestone-tag tag-milestone">定位</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 4 月底</div>
+        <div class="milestone-title">搭建记忆系统</div>
+        <div class="milestone-text">给 AI 装上了"记忆"。它开始记得我昨天说了什么、上周做了什么决定。从"每次重新介绍自己"到"不用说它就知道"。</div>
+        <span class="milestone-tag tag-milestone">基础设施</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 5 月初</div>
+        <div class="milestone-title">霜言加入</div>
+        <div class="milestone-text">接入了第二个 AI，Claude Code。给它起了个名字叫霜言。不再是"我+一个助手"，而是"我有了一个团队"。两个 AI 之间可以共享文件、互相审查。</div>
+        <span class="milestone-tag tag-turning">转折</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 5 月 8 日</div>
+        <div class="milestone-title">第一次双核咨询</div>
+        <div class="milestone-text">落弦和霜言第一次协同完成一份战略咨询报告。客户提交问题，两个 AI 各自分析，整合后交付。整个过程全自动，我只需要确认结果。</div>
+        <span class="milestone-tag tag-breakthrough">突破</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 5 月 13 日</div>
+        <div class="milestone-title">投资决心</div>
+        <div class="milestone-text">坦白了自己的真实瓶颈：不是恐惧，不是无知，是懒，觉得搜集资料太麻烦。然后做出了承诺：每周投入7到10小时学习投资。目标是成为芒格那样的人。</div>
+        <span class="milestone-tag tag-milestone">承诺</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 5 月下旬</div>
+        <div class="milestone-title">公众号60篇</div>
+        <div class="milestone-text">从11月到现在，写了60多篇文章。篇均阅读量从127掉到44又回升。开始理解：阅读量不等于商业价值，真正的机会在50到80个稳定读者里。</div>
+        <span class="milestone-tag tag-milestone">积累</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 6 月 3 日</div>
+        <div class="milestone-title">ChatGPT的回信</div>
+        <div class="milestone-text">把自己的个人画像发给 ChatGPT，它写了一封回信。其中一句："投资是防守，创造是进攻。"还有一句："寒星宇宙不是职业资产，但它是能力孵化器。"这就是外部视角的价值。</div>
+        <span class="milestone-tag tag-turning">转折</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 6 月 4 日</div>
+        <div class="milestone-title">考研复习网页</div>
+        <div class="milestone-text">一句代码都没写，纯靠口述需求，让 AI 做了一个给学生用的考研复习网页。一个不会编程的文科生，做出了自己的第一个工具。</div>
+        <span class="milestone-tag tag-breakthrough">突破</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 6 月 5 日</div>
+        <div class="milestone-title">有人愿意付费围观我用AI</div>
+        <div class="milestone-text">发了一条朋友圈，说想带几个人围观自己怎么用AI。一晚上5个人报名，每人39块。重要的不是钱，是有人愿意花时间来看你怎么干活。第一个付费围观群，7天同行，就这样开始了。</div>
+        <span class="milestone-tag tag-breakthrough">突破</span>
+      </div>
+    </div>
+
+    <div class="milestone reveal">
+      <div class="milestone-dot"></div>
+      <div class="milestone-content">
+        <div class="milestone-date">2026 年 6 月 6 日</div>
+        <div class="milestone-title">今天</div>
+        <div class="milestone-text">装好了浏览器阅读能力，部署了自托管记忆后端，学会了做漂亮的网页，拥有了40多个专属技能、6个自动化任务、一套完整的AI协作系统。起点那个连终端都不知道是什么的文科生，回头看了一眼，走了挺远了。</div>
+        <span class="milestone-tag tag-breakthrough">此刻</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing reveal">
+  <div class="container">
+    <div class="closing-line"></div>
+    <h2>不是学会了AI，是学会了指挥</h2>
+    <p>走到现在学到的最重要的事：AI 再强，也得有人告诉它往哪走。那个"往哪走"的判断力，是一个文科生的，不是机器的。</p>
+    <p class="sig">2026.06.06 · 于书房</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
+    })
+  },{threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+})();
+</script>
+</body>
+</html>

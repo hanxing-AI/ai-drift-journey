@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一个人的AI军团</title>
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2236;
+  --border: #1e2a42;
+  --text: #e8e6e3;
+  --muted: #7b8ba4;
+  --gold: #e0a876;
+  --gold-dim: rgba(224,168,118,0.12);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96,165,250,0.1);
+  --teal: #34d399;
+  --teal-dim: rgba(52,211,153,0.1);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.1);
+  --rose: #f472b6;
+  --rose-dim: rgba(244,114,182,0.1);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251,191,36,0.1);
+  --font: 'PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(96,165,250,0.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+.hero-content{position:relative;z-index:1}
+.hero h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:20px;line-height:1.15}
+.hero h1 .line1{color:var(--text)}
+.hero h1 .line2{display:block;background:linear-gradient(135deg,var(--gold),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .tagline{font-size:clamp(1rem,2vw,1.3rem);color:var(--muted);max-width:480px;margin:0 auto 40px}
+.hero .scroll-hint{color:var(--muted);font-size:0.8rem;opacity:0.6;animation:pulse 2.5s ease infinite}
+@keyframes pulse{0%,100%{opacity:0.4;transform:translateY(0)}50%{opacity:0.8;transform:translateY(6px)}}
+
+/* ===== ORIGIN ===== */
+.origin{padding:100px 0 80px}
+.origin-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.origin-text{font-size:1.05rem;color:var(--muted);line-height:2}
+.origin-text .highlight{color:var(--gold);font-weight:600}
+.origin-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:center}
+.stat-num{font-size:2.2rem;font-weight:700;line-height:1.1}
+.stat-label{font-size:0.78rem;color:var(--muted);margin-top:6px}
+.stat-card:nth-child(1) .stat-num{color:var(--gold)}
+.stat-card:nth-child(2) .stat-num{color:var(--blue)}
+.stat-card:nth-child(3) .stat-num{color:var(--teal)}
+.stat-card:nth-child(4) .stat-num{color:var(--purple)}
+
+/* ===== SECTION HEADERS ===== */
+.sec-label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);margin-bottom:8px}
+.sec-title{font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:700;margin-bottom:16px}
+.sec-desc{color:var(--muted);font-size:0.95rem;max-width:600px;margin-bottom:48px}
+
+/* ===== THE TEAM (4 agents) ===== */
+.team{padding:80px 0}
+.team-visual{position:relative;max-width:700px;margin:0 auto;height:420px}
+.team-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;color:var(--bg);z-index:2;text-align:center;line-height:1.2}
+.team-orbit{position:absolute;top:50%;left:50%;width:320px;height:320px;margin:-160px 0 0 -160px;border:1px dashed var(--border);border-radius:50%;animation:rotate 60s linear infinite}
+@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.agent-node{position:absolute;width:120px;text-align:center;animation:counter-rotate 60s linear infinite}
+@keyframes counter-rotate{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+.agent-dot{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;border:2px solid;transition:transform 0.3s,box-shadow 0.3s}
+.agent-dot:hover{transform:scale(1.12)}
+.agent-name{font-weight:600;font-size:0.95rem;margin-bottom:2px}
+.agent-role{font-size:0.72rem;color:var(--muted)}
+.agent-platform{font-size:0.65rem;color:var(--muted);opacity:0.7}
+.agent-node:nth-child(1){top:-32px;left:50%;margin-left:-60px}
+.agent-node:nth-child(2){bottom:-32px;left:50%;margin-left:-60px}
+.agent-node:nth-child(3){left:-32px;top:50%;margin-top:-32px}
+.agent-node:nth-child(4){right:-32px;top:50%;margin-top:-32px}
+.agent-node:nth-child(1) .agent-dot{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
+.agent-node:nth-child(2) .agent-dot{background:var(--blue-dim);border-color:var(--blue);color:var(--blue)}
+.agent-node:nth-child(3) .agent-dot{background:var(--teal-dim);border-color:var(--teal);color:var(--teal)}
+.agent-node:nth-child(4) .agent-dot{background:rgba(120,130,150,0.1);border-color:#788296;color:#788296}
+/* Connection lines (SVG overlay) */
+.team-lines{position:absolute;inset:0;pointer-events:none;z-index:1}
+
+/* ===== CONSTELLATION MAP ===== */
+.constellation-section{padding:100px 0}
+.star-map{position:relative;min-height:600px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px}
+.constellation{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 24px;position:relative;transition:border-color 0.3s,transform 0.3s;overflow:hidden}
+.constellation:hover{transform:translateY(-4px)}
+.constellation::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.constellation:nth-child(1)::before{background:var(--gold)}
+.constellation:nth-child(1):hover{border-color:var(--gold)}
+.constellation:nth-child(2)::before{background:linear-gradient(90deg,var(--gold),var(--blue))}
+.constellation:nth-child(2):hover{border-color:var(--purple)}
+.constellation:nth-child(3)::before{background:var(--blue)}
+.constellation:nth-child(3):hover{border-color:var(--blue)}
+.constellation:nth-child(4)::before{background:var(--teal)}
+.constellation:nth-child(4):hover{border-color:var(--teal)}
+.constellation:nth-child(5)::before{background:var(--amber)}
+.constellation:nth-child(5):hover{border-color:var(--amber)}
+.constellation:nth-child(6)::before{background:var(--rose)}
+.constellation:nth-child(6):hover{border-color:var(--rose)}
+.const-name{font-size:1.1rem;font-weight:600;margin-bottom:4px}
+.const-sub{font-size:0.75rem;color:var(--muted);margin-bottom:16px}
+.const-stars{display:flex;flex-wrap:wrap;gap:8px}
+.star{font-size:0.72rem;padding:5px 12px;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:var(--text);white-space:nowrap;transition:background 0.2s}
+.star:hover{background:rgba(255,255,255,0.08)}
+.constellation:nth-child(1) .star{border-color:rgba(224,168,118,0.2);color:var(--gold)}
+.constellation:nth-child(2) .star{border-color:rgba(167,139,250,0.2);color:var(--purple)}
+.constellation:nth-child(3) .star{border-color:rgba(96,165,250,0.2);color:var(--blue)}
+.constellation:nth-child(4) .star{border-color:rgba(52,211,153,0.2);color:var(--teal)}
+.constellation:nth-child(5) .star{border-color:rgba(251,191,36,0.2);color:var(--amber)}
+.constellation:nth-child(6) .star{border-color:rgba(244,114,182,0.2);color:var(--rose)}
+
+/* ===== DAILY AUTOMATION ===== */
+.automation{padding:80px 0}
+.auto-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.auto-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px 20px;transition:border-color 0.2s}
+.auto-card:hover{border-color:var(--blue)}
+.auto-icon{font-size:1.6rem;margin-bottom:12px}
+.auto-name{font-weight:600;font-size:0.95rem;margin-bottom:6px}
+.auto-schedule{font-size:0.72rem;color:var(--muted);margin-bottom:8px}
+.auto-desc{font-size:0.8rem;color:var(--muted);line-height:1.5}
+.auto-status{display:inline-flex;align-items:center;gap:5px;font-size:0.68rem;margin-top:10px;padding:3px 10px;border-radius:12px;background:var(--teal-dim);color:var(--teal)}
+.auto-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* ===== PATTERN ===== */
+.pattern{padding:80px 0;border-top:1px solid var(--border)}
+.pattern-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.pattern-card{padding:32px 28px;border-radius:12px;border:1px solid var(--border);background:var(--surface);position:relative;overflow:hidden}
+.pattern-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.pattern-card:nth-child(1)::after{background:var(--gold)}
+.pattern-card:nth-child(2)::after{background:var(--purple)}
+.pattern-card:nth-child(3)::after{background:var(--teal)}
+.pattern-num{font-size:2.8rem;font-weight:800;opacity:0.12;position:absolute;top:12px;right:20px;line-height:1}
+.pattern-title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.pattern-desc{font-size:0.85rem;color:var(--muted);line-height:1.7}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:80px 0 50px;color:var(--muted);font-size:0.82rem}
+.footer-line{width:80px;height:2px;background:linear-gradient(90deg,var(--gold),var(--blue));margin:0 auto 24px;border-radius:1px}
+.footer-quote{font-size:1.1rem;color:var(--text);font-weight:500;margin-bottom:8px}
+
+/* ===== ANIMATIONS ===== */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.team-orbit{animation:none}.agent-node{animation:none}}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .origin-grid{grid-template-columns:1fr}
+  .star-map{grid-template-columns:1fr 1fr}
+  .auto-grid{grid-template-columns:1fr 1fr}
+  .pattern-cards{grid-template-columns:1fr}
+  .team-visual{height:360px}
+  .team-orbit{width:260px;height:260px;margin:-130px 0 0 -130px}
+}
+@media(max-width:600px){
+  .star-map{grid-template-columns:1fr}
+  .auto-grid{grid-template-columns:1fr}
+  section{padding:60px 0}
+  .origin-stats{grid-template-columns:1fr 1fr}
+  .team-visual{height:320px}
+  .team-orbit{width:220px;height:220px;margin:-110px 0 0 -110px}
+  .agent-node{width:100px}
+  .agent-dot{width:52px;height:52px;font-size:1.3rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>
+      <span class="line1">一个人的</span>
+      <span class="line2">AI 军团</span>
+    </h1>
+    <p class="tagline">三个月，从光杆司令到四个AI协同作战</p>
+    <div class="scroll-hint">↓</div>
+  </div>
+</section>
+
+<!-- ===== ORIGIN ===== -->
+<section class="origin">
+  <div class="container">
+    <div class="origin-grid">
+      <div class="reveal">
+        <div class="sec-label">THE ORIGIN</div>
+        <h2 class="sec-title">三个月前</h2>
+        <p class="origin-text">
+          三个月前，只有一个终端窗口和一个AI。<br><br>
+          没有团队，没有流程，没有记忆。每次对话都是<span class="highlight">从零开始</span>。<br><br>
+          然后一件事接一件事地发生：写文章需要配图，于是有了视觉能力；双核协作需要记忆共享，于是搭了索引系统；每周需要看AI新动态，于是设了自动扫描。<br><br>
+          每一个新能力都不是"装了个插件"，而是<span class="highlight">从真实需求里长出来的</span>。
+        </p>
+      </div>
+      <div class="origin-stats reveal">
+        <div class="stat-card">
+          <div class="stat-num">40+</div>
+          <div class="stat-label">专属技能</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">4</div>
+          <div class="stat-label">AI 核心成员</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">6</div>
+          <div class="stat-label">自动化任务</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">6</div>
+          <div class="stat-label">能力领域</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== THE TEAM ===== -->
+<section class="team">
+  <div class="container">
+    <div class="sec-label reveal">THE TEAM</div>
+    <h2 class="sec-title reveal">四核协作</h2>
+    <p class="sec-desc reveal">不是一个AI在干活，是一个有分工的团队。每个成员有自己的性格、专长和职责。</p>
+    <div class="team-visual reveal">
+      <!-- Connection lines (SVG) -->
+      <svg class="team-lines" viewBox="0 0 700 420">
+        <line x1="350" y1="210" x2="350" y2="50" stroke="var(--gold)" stroke-width="1" opacity="0.2"/>
+        <line x1="350" y1="210" x2="350" y2="370" stroke="var(--blue)" stroke-width="1" opacity="0.2"/>
+        <line x1="350" y1="210" x2="190" y2="210" stroke="var(--teal)" stroke-width="1" opacity="0.2"/>
+        <line x1="350" y1="210" x2="510" y2="210" stroke="#788296" stroke-width="1" opacity="0.2"/>
+      </svg>
+      <div class="team-center">协作<br>中枢</div>
+      <div class="team-orbit"></div>
+      <!-- Agent nodes -->
+      <div class="agent-node" style="top:-32px;left:50%;margin-left:-60px">
+        <div class="agent-dot">⚡</div>
+        <div class="agent-name">落弦</div>
+        <div class="agent-role">副官 · 枢纽</div>
+        <div class="agent-platform">Hermes</div>
+      </div>
+      <div class="agent-node" style="bottom:-32px;left:50%;margin-left:-60px">
+        <div class="agent-dot">❄</div>
+        <div class="agent-name">霜言</div>
+        <div class="agent-role">最后防线</div>
+        <div class="agent-platform">Claude Code</div>
+      </div>
+      <div class="agent-node" style="left:-32px;top:50%;margin-top:-32px">
+        <div class="agent-dot">🕊</div>
+        <div class="agent-name">飞羽</div>
+        <div class="agent-role">独立作战</div>
+        <div class="agent-platform">Coze 云端</div>
+      </div>
+      <div class="agent-node" style="right:-32px;top:50%;margin-top:-32px">
+        <div class="agent-dot">🤖</div>
+        <div class="agent-name">ChatGPT</div>
+        <div class="agent-role">外部顾问</div>
+        <div class="agent-platform">手动中转</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SKILL CONSTELLATIONS ===== -->
+<section class="constellation-section">
+  <div class="container">
+    <div class="sec-label reveal">THE ARSENAL</div>
+    <h2 class="sec-title reveal">六大能力域</h2>
+    <p class="sec-desc reveal">每个领域不是一个工具，而是一条完整的链路。从输入到输出到反馈，闭环运转。</p>
+    <div class="star-map">
+      <!-- 1. Content -->
+      <div class="constellation reveal">
+        <div class="const-name">内容军团</div>
+        <div class="const-sub">从选题到发布的全链路</div>
+        <div class="const-stars">
+          <span class="star">文风学习</span>
+          <span class="star">文稿转文章</span>
+          <span class="star">标题优化</span>
+          <span class="star">深度阅读</span>
+          <span class="star">素材追踪</span>
+          <span class="star">内容日历</span>
+          <span class="star">漫画/插画</span>
+          <span class="star">信息图</span>
+        </div>
+      </div>
+      <!-- 2. Collaboration -->
+      <div class="constellation reveal">
+        <div class="const-name">协作核心</div>
+        <div class="const-sub">多核Agent的组织与进化</div>
+        <div class="const-stars">
+          <span class="star">双核写作协议</span>
+          <span class="star">共享实体索引</span>
+          <span class="star">标签化记忆</span>
+          <span class="star">反思进化</span>
+          <span class="star">叙事协作</span>
+          <span class="star">双重确认</span>
+          <span class="star">咨询服务</span>
+        </div>
+      </div>
+      <!-- 3. Knowledge -->
+      <div class="constellation reveal">
+        <div class="const-name">知识智库</div>
+        <div class="const-sub">记住、检索、复习、压缩</div>
+        <div class="const-stars">
+          <span class="star">个人知识脑</span>
+          <span class="star">记忆维护</span>
+          <span class="star">间隔闪卡</span>
+          <span class="star">Token压缩</span>
+          <span class="star">对话存档</span>
+        </div>
+      </div>
+      <!-- 4. Intelligence -->
+      <div class="constellation reveal">
+        <div class="const-name">情报网络</div>
+        <div class="const-sub">看见外面的世界</div>
+        <div class="const-stars">
+          <span class="star">浏览器读网页</span>
+          <span class="star">AI见识扫描</span>
+          <span class="star">技术侦察</span>
+          <span class="star">学术调研</span>
+          <span class="star">安全审计</span>
+        </div>
+      </div>
+      <!-- 5. Investment -->
+      <div class="constellation reveal">
+        <div class="const-name">投资参谋</div>
+        <div class="const-sub">芒格式思维训练</div>
+        <div class="const-stars">
+          <span class="star">研究验证</span>
+          <span class="star">购买决策</span>
+          <span class="star">承诺度诊断</span>
+          <span class="star">执行方案</span>
+        </div>
+      </div>
+      <!-- 6. Infrastructure -->
+      <div class="constellation reveal">
+        <div class="const-name">基建工程</div>
+        <div class="const-sub">让一切能跑起来的底座</div>
+        <div class="const-stars">
+          <span class="star">WSL环境</span>
+          <span class="star">多Provider</span>
+          <span class="star">Docker</span>
+          <span class="star">Honcho记忆</span>
+          <span class="star">浏览器自动化</span>
+          <span class="star">Office操作</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AUTOMATION ===== -->
+<section class="automation">
+  <div class="container">
+    <div class="sec-label reveal">AUTOMATION</div>
+    <h2 class="sec-title reveal">系统自己在转</h2>
+    <p class="sec-desc reveal">6个定时任务，不需要你提醒，到点就干活。</p>
+    <div class="auto-grid">
+      <div class="auto-card reveal">
+        <div class="auto-icon">🔍</div>
+        <div class="auto-name">AI见识扫描</div>
+        <div class="auto-schedule">每周六 09:00</div>
+        <div class="auto-desc">扫描近期AI领域的创意用法、工具、新应用，整理成10-15条案例报告。</div>
+        <div class="auto-status">运行中</div>
+      </div>
+      <div class="auto-card reveal">
+        <div class="auto-icon">📅</div>
+        <div class="auto-name">内容日历提醒</div>
+        <div class="auto-schedule">每周一、四 09:00</div>
+        <div class="auto-desc">检查今天是否是发文提醒日，如果是就提醒阁下准备内容。</div>
+        <div class="auto-status">运行中</div>
+      </div>
+      <div class="auto-card reveal">
+        <div class="auto-icon">🧠</div>
+        <div class="auto-name">记忆月度自检</div>
+        <div class="auto-schedule">每月1日 09:00</div>
+        <div class="auto-desc">扫描所有记忆条目，分析使用率和质量，清理过期内容，优化标签。</div>
+        <div class="auto-status">运行中</div>
+      </div>
+      <div class="auto-card reveal">
+        <div class="auto-icon">📚</div>
+        <div class="auto-name">Brain周维护</div>
+        <div class="auto-schedule">每周一 09:00</div>
+        <div class="auto-desc">检查个人知识脑的健康状况：档案数、分类质量、孤立节点、链接完整度。</div>
+        <div class="auto-status">运行中</div>
+      </div>
+      <div class="auto-card reveal">
+        <div class="auto-icon">💬</div>
+        <div class="auto-name">STAGING初始化</div>
+        <div class="auto-schedule">每小时</div>
+        <div class="auto-desc">自动维护今日对话存档的STAGING文件，为对话存档做准备。</div>
+        <div class="auto-status">运行中</div>
+      </div>
+      <div class="auto-card reveal">
+        <div class="auto-icon">🎭</div>
+        <div class="auto-name">季度叙事审计</div>
+        <div class="auto-schedule">每季度首月1日</div>
+        <div class="auto-desc">检查所有Agent的实际使用率、功能覆盖度、叙事价值与维护成本。</div>
+        <div class="auto-status">已排期</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PATTERN ===== -->
+<section class="pattern">
+  <div class="container">
+    <div class="sec-label reveal">THE PATTERN</div>
+    <h2 class="sec-title reveal">三条规律</h2>
+    <p class="sec-desc reveal">回过头看，所有能力的建设都遵循同样的逻辑。</p>
+    <div class="pattern-cards">
+      <div class="pattern-card reveal">
+        <div class="pattern-num">01</div>
+        <div class="pattern-title">从工具到系统</div>
+        <div class="pattern-desc">不是在收集零散的工具，而是在搭建工作流闭环。每一个领域都形成了"输入 → 处理 → 输出 → 反馈"的完整链条。单个工具会过时，系统不会。</div>
+      </div>
+      <div class="pattern-card reveal">
+        <div class="pattern-num">02</div>
+        <div class="pattern-title">从使用到协作</div>
+        <div class="pattern-desc">不是在"用AI"，是在"带团队"。角色分工、记忆共享、反思进化——这套东西在个人AI用户里很少见，但恰恰是最有力量的部分。</div>
+      </div>
+      <div class="pattern-card reveal">
+        <div class="pattern-num">03</div>
+        <div class="pattern-title">从通用到专属</div>
+        <div class="pattern-desc">大量能力是量身定制的：文风学习、素材追踪、双核咨询、叙事审计。不是套模板，而是从真实需求里长出来的。别人拿不走，因为根长在你身上。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-line"></div>
+  <p class="footer-quote">从一个人到一支军队，从用工具到带团队。</p>
+  <p>每一颗星都是从真实需求里长出来的。</p>
+</footer>
+
+<script>
+(function(){
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
+    })
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+})();
+</script>
+</body>
+</html>

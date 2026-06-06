@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寒星的AI漂流之旅</title>
+<style>
+:root{--bg:#0c0f14;--surface:#141820;--border:#222a38;--text:#e8e6e3;--muted:#7b8ba4;--gold:#e0a876;--blue:#60a5fa;--teal:#34d399;--font:'PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px}
+h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;text-align:center;margin-bottom:8px;background:linear-gradient(135deg,var(--gold),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{color:var(--muted);font-size:0.95rem;text-align:center;margin-bottom:56px}
+.cards{display:flex;flex-direction:column;gap:20px;max-width:520px;width:100%}
+a.card{display:block;padding:28px 32px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--text);transition:border-color 0.2s,transform 0.2s}
+a.card:hover{border-color:var(--gold);transform:translateY(-3px)}
+a.card .label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+a.card .title{font-size:1.2rem;font-weight:600;margin-bottom:6px}
+a.card .desc{font-size:0.82rem;color:var(--muted);line-height:1.6}
+a.card:nth-child(1) .label{color:var(--gold)}
+a.card:nth-child(2) .label{color:var(--blue)}
+a.card:nth-child(3) .label{color:var(--teal)}
+.footer{margin-top:56px;font-size:0.72rem;color:var(--muted);opacity:0.4;text-align:center}
+</style>
+</head>
+<body>
+<h1>寒星的AI漂流之旅</h1>
+<p class="sub">一个文科生和AI的故事</p>
+<div class="cards">
+  <a class="card" href="three-months.html">
+    <div class="label">时间线</div>
+    <div class="title">寒星的AI漂流之旅</div>
+    <div class="desc">从不会安装到拥有自己的AI军团，一个文科生的漂流之旅。</div>
+  </a>
+  <a class="card" href="ai-army-of-one.html">
+    <div class="label">全貌</div>
+    <div class="title">一个人的AI军团</div>
+    <div class="desc">四核协作、六大能力域、六个自动化任务。三个月建起来的AI协作系统。</div>
+  </a>
+  <a class="card" href="skill-acquisition-system.html">
+    <div class="label">方法论</div>
+    <div class="title">从直觉到系统</div>
+    <div class="desc">一个人如何把阅读本能变成可复制的知识获取框架。</div>
+  </a>
+</div>
+<div class="footer">2026 · 寒星</div>
+</body>
+</html>
